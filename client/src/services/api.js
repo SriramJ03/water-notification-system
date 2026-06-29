@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const API_URL = "https://water-notification-system.onrender.com/api";
+
+console.log("Using API:", API_URL);
+
 const API = axios.create({
-  baseURL: "https://water-notification-system.onrender.com/api",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -9,6 +13,8 @@ const API = axios.create({
 
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
+
+  console.log("Request URL:", config.baseURL + config.url);
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -20,6 +26,8 @@ API.interceptors.request.use((config) => {
 API.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error("API Error:", error);
+
     if (error.response?.status === 401 || error.response?.status === 403) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
