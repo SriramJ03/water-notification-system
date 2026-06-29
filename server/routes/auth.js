@@ -1,0 +1,11 @@
+const express = require('express');
+const router = express.Router();
+const auth = require('../controllers/authController');
+const { verifyToken } = require('../middleware/auth');
+router.post('/register', auth.register);
+router.post('/login', auth.login);
+router.post('/logout', verifyToken, auth.logout);
+router.get('/profile', verifyToken, auth.getProfile);
+router.put('/profile', verifyToken, auth.updateProfile);
+router.put('/change-password', verifyToken, auth.changePassword);
+module.exports = router;

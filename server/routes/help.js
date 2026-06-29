@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const help = require('../controllers/helpController');
+const { verifyToken } = require('../middleware/auth');
+router.get('/volunteers', verifyToken, help.getVolunteers);
+router.post('/volunteer', verifyToken, help.registerVolunteer);
+router.get('/', verifyToken, help.getAll);
+router.post('/', verifyToken, help.create);
+router.put('/:id/accept', verifyToken, help.accept);
+module.exports = router;
