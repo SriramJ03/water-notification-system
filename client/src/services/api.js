@@ -1,10 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API = axios.create({ baseURL: '/api' });
+const API = axios.create({
+  baseURL:
+    process.env.REACT_APP_API_URL ||
+    "https://water-notification-system.onrender.com/api",
+});
 
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
@@ -12,9 +18,9 @@ API.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401 || err.response?.status === 403) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
     }
     return Promise.reject(err);
   }
